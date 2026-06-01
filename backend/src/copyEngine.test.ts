@@ -31,7 +31,7 @@ describe('copy trading engine', () => {
 
   it('rounds quantities down to exchange step size', () => {
     expect(roundDownToStep(0.1239, 0.001)).toBe(0.123);
-    expect(roundDownToStep(5.678, 0.1)).toBe(5.6000000000000005);
+    expect(roundDownToStep(5.678, 0.1)).toBeCloseTo(5.6, 5);
   });
 
   it('creates an accepted copied order with proportional quantity and margin', () => {
