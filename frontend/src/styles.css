@@ -23,10 +23,9 @@ select {
   background-position: right 12px center;
   background-size: 16px 16px;
 }
-select::-ms-expand {
-  display: none;
-}
-button { width: 100%; border: 0; border-radius: 12px; padding: 13px 14px; background: #38bdf8; color: #082f49; font-weight: 800; cursor: pointer; }
+select::-ms-expand { display: none; }
+button { width: 100%; border: 0; border-radius: 12px; padding: 13px 14px; background: #38bdf8; color: #082f49; font-weight: 800; cursor: pointer; transition: opacity .15s; }
+button:disabled { opacity: .5; cursor: not-allowed; }
 .followers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 .follower { border: 1px solid #25324a; border-radius: 16px; padding: 16px; background: #0b1120; }
 .follower strong, .follower span { display: block; }
@@ -38,9 +37,18 @@ th { color: #94a3b8; font-size: 13px; }
 .accepted { background: rgba(34,197,94,.12); color: #86efac; }
 .rejected { background: rgba(248,113,113,.12); color: #fca5a5; }
 small { display: block; margin-top: 6px; color: #94a3b8; max-width: 220px; }
-.empty, .error { color: #fca5a5; }
+.empty { color: #94a3b8; text-align: center; padding: 32px 0; }
+.error { color: #fca5a5; margin-top: 10px; font-size: 14px; }
+.hint { color: #64748b; font-size: 13px; margin-top: 14px; line-height: 1.6; }
 .table-card { overflow-x: auto; }
 .table-card table { min-width: 760px; }
+
+.summary-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+.summary-item { background: #111827; border: 1px solid #1f2937; border-radius: 16px; padding: 18px 20px; }
+.summary-item span { display: block; color: #94a3b8; font-size: 13px; margin-bottom: 6px; }
+.summary-item strong { font-size: 22px; }
+.accepted-text { color: #86efac; }
+.rejected-text { color: #fca5a5; }
 
 @media (max-width: 1100px) {
   .grid { grid-template-columns: 320px 1fr; }
@@ -53,10 +61,14 @@ small { display: block; margin-top: 6px; color: #94a3b8; max-width: 220px; }
   h1 { font-size: 32px; }
   .subtitle { font-size: 15px; line-height: 1.5; }
   .followers { grid-template-columns: 1fr; }
+  .summary-bar { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 480px) {
   h1 { font-size: 28px; }
   .card { border-radius: 14px; padding: 16px; }
   th, td { padding: 10px 8px; }
+  .summary-bar { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .summary-item { padding: 14px 16px; }
+  .summary-item strong { font-size: 18px; }
 }
