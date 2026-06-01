@@ -14,7 +14,7 @@ const tradeSchema = z.object({
   side: z.enum(['BUY', 'SELL']),
   quantity: z.number().positive(),
   price: z.number().positive(),
-  leverage: z.number().int().positive().max(125)
+  leverage: z.number().int().min(1).max(125)
 });
 
 app.get('/api/leader-trades', (_req, res) => res.json(leaderTrades));
@@ -32,7 +32,27 @@ app.post('/api/simulate-copy', (req, res) => {
     ...parsed.data
   };
 
-  return res.json({ trade, orders: buildOrdersForTrade(trade, followers) });
+  const orders = buildOrdersForTrade(trade, followers).map((order) => {
+    const follower = followers.find((f) => f.id === order.followerId);
+    return {
+      ...order,
+      followerName: follower?.name ?? order.followerId
+    };
+  });
+
+  const accepted = orders.filter((o) => o.status === 'ACCEPTED');
+  const rejected = orders.filter((o) => o.status === 'REJECTED');
+
+  return res.json({
+    trade,
+    orders,
+    summary: {
+      acceptedCount: accepted.length,
+      rejectedCount: rejected.length,
+      totalNotional: Number(accepted.reduce((sum, o) => sum + o.notional, 0).toFixed(2)),
+      totalMargin: Number(accepted.reduce((sum, o) => sum + o.marginRequired, 0).toFixed(2))
+    }
+  });
 });
 
 const port = Number(process.env.PORT ?? 4000);
